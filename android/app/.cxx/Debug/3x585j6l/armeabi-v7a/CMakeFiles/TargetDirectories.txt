@@ -1,0 +1,4 @@
+E:/Documentos/GitHub/Between Worlds/core/android/app/.cxx/Debug/3x585j6l/armeabi-v7a/CMakeFiles/native-lib.dir
+E:/Documentos/GitHub/Between Worlds/core/android/app/.cxx/Debug/3x585j6l/armeabi-v7a/CMakeFiles/native-app-glue.dir
+E:/Documentos/GitHub/Between Worlds/core/android/app/.cxx/Debug/3x585j6l/armeabi-v7a/CMakeFiles/edit_cache.dir
+E:/Documentos/GitHub/Between Worlds/core/android/app/.cxx/Debug/3x585j6l/armeabi-v7a/CMakeFiles/rebuild_cache.dir

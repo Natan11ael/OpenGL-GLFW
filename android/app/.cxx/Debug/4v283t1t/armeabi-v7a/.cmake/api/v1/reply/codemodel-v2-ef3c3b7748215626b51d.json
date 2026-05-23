@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "MyApp",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "native-app-glue::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-native-app-glue-Debug-670470b9d985d8622dbb.json",
+					"name" : "native-app-glue",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "native-lib::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-native-lib-Debug-6464c073c6d43abe18cd.json",
+					"name" : "native-lib",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "E:/Documentos/GitHub/Between Worlds/core/android/app/.cxx/Debug/4v283t1t/armeabi-v7a",
+		"source" : "E:/Documentos/GitHub/Between Worlds/core/android/app"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

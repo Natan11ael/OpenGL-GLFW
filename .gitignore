@@ -1,5 +1,5 @@
 # --- Pastas de Compilação (Crucial para o CMake) ---
-windows/build/
+build/
 
 # --- Arquivos do compilador Microsoft (MSVC / Visual Studio) ---
 *.vcxproj

@@ -1,0 +1,12 @@
+[
+{
+  "directory": "E:/Documentos/GitHub/Between Worlds/core/android/app/.cxx/Debug/3x585j6l/x86",
+  "command": "E:\\ProgramData\\Android\\Sdk\\ndk\\25.1.8937393\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe --target=i686-none-linux-android24 --sysroot=E:/ProgramData/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dnative_lib_EXPORTS -IE:/ProgramData/Android/Sdk/ndk/25.1.8937393/sources/android/native_app_glue -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fno-limit-debug-info  -fPIC -o CMakeFiles\\native-lib.dir\\src\\main\\cpp\\main.cpp.o -c \"E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\src\\main\\cpp\\main.cpp\"",
+  "file": "E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\src\\main\\cpp\\main.cpp"
+},
+{
+  "directory": "E:/Documentos/GitHub/Between Worlds/core/android/app/.cxx/Debug/3x585j6l/x86",
+  "command": "E:\\ProgramData\\Android\\Sdk\\ndk\\25.1.8937393\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe --target=i686-none-linux-android24 --sysroot=E:/ProgramData/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC -o CMakeFiles\\native-app-glue.dir\\E_\\ProgramData\\Android\\Sdk\\ndk\\25.1.8937393\\sources\\android\\native_app_glue\\android_native_app_glue.c.o -c E:\\ProgramData\\Android\\Sdk\\ndk\\25.1.8937393\\sources\\android\\native_app_glue\\android_native_app_glue.c",
+  "file": "E:\\ProgramData\\Android\\Sdk\\ndk\\25.1.8937393\\sources\\android\\native_app_glue\\android_native_app_glue.c"
+}
+]

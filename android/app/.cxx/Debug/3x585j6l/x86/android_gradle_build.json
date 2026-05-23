@@ -1,0 +1,46 @@
+{
+  "buildFiles": [
+    "E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "E:\\ProgramData\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\.cxx\\Debug\\3x585j6l\\x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "E:\\ProgramData\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\.cxx\\Debug\\3x585j6l\\x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "native-app-glue::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "native-app-glue",
+      "output": "E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\.cxx\\Debug\\3x585j6l\\x86\\libnative-app-glue.a"
+    },
+    "native-lib::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "native-lib",
+      "output": "E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\build\\intermediates\\cxx\\Debug\\3x585j6l\\obj\\x86\\libnative-lib.so",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "E:\\ProgramData\\Android\\Sdk\\ndk\\25.1.8937393\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe",
+      "cppCompilerExecutable": "E:\\ProgramData\\Android\\Sdk\\ndk\\25.1.8937393\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
+    }
+  },
+  "cFileExtensions": [
+    "c"
+  ],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}
