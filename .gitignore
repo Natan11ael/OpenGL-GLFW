@@ -1,0 +1,24 @@
+# --- Pastas de Compilação (Crucial para o CMake) ---
+windows/build/
+
+# --- Arquivos do compilador Microsoft (MSVC / Visual Studio) ---
+*.vcxproj
+*.filters
+*.user
+*.sln
+*.suo
+*.db
+*.opendb
+.vs/
+ipch/
+*.ilk
+*.pdb
+*.exp
+*.exe
+
+# --- Configurações locais do VS Code ---
+# .vscode/ # Mantenha esta linha comentada para erros de configuração do VS Code não aparecerem. 
+
+# --- Arquivos temporários do sistema ---
+Thumbs.db
+.DS_Store

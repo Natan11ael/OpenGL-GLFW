@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: black;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <script type="module">
+        const MAX_OBJECTS = 10_000;
+        const attr = 8; let aliveObjects = 4 ** 5; // 8 atributos (x, y, vx, vy, raio, densidade, massa, temperatura) | 64 objetos
+        const arr = new Float32Array(MAX_OBJECTS * attr).fill(0);
+        for (let i = 0; i < aliveObjects; i++) {
+            arr[i * attr + 0] = Math.random() * 1 - .4;                      // x  → [-1, 1]
+            arr[i * attr + 1] = Math.random() * 1 - .4;                      // y  → [-1, 1]
+            arr[i * attr + 2] = 0;                                           // vx → parado
+            arr[i * attr + 3] = 0;                                           // vy → parado
+            arr[i * attr + 4] = Math.random() * 0.003 + 0.003;               // raio → pequeno
+            arr[i * attr + 5] = Math.random() * 1000.0 + 1;                  // densidade -> pequeno
+            arr[i * attr + 6] = (Math.PI * arr[i * attr + 4] ** 2) * arr[i * attr + 5];  // massa → area * densidade
+            arr[i * attr + 7] = 0;                                           // temperatura -> pequeno
+        }
+
+        try {
+            // config
+            const adapter = await navigator.gpu.requestAdapter();
+            const device = await adapter.requestDevice();
+            const canvas = document.getElementById('canvas');
+            const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }; resize();
+            window.addEventListener('resize', resize);
+            const context = canvas.getContext('webgpu');
+            const format = navigator.gpu.getPreferredCanvasFormat();
+            context.configure({ device, format });
+
+            const useTS = device.features.has("timestamp-query");
+            const qs = useTS ? device.createQuerySet({ type: "timestamp", count: 2 }) : null;
+            const qbuf = useTS ? device.createBuffer({
+                size: 16,
+                usage: GPUBufferUsage.QUERY_RESOLVE | GPUBufferUsage.COPY_SRC
+            }) : null;
+            const readBuf = useTS ? device.createBuffer({
+                size: 16,
+                usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ
+            }) : null;
+
+            const bufferA = device.createBuffer({
+                size: arr.byteLength,
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.VERTEX
+            });
+
+            const bufferB = device.createBuffer({
+                size: arr.byteLength,
+                usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.VERTEX
+            });
+
+            const configBuffer = device.createBuffer({
+                size: 4,
+                usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+            });
+
+            device.queue.writeBuffer(configBuffer, 0, new Uint32Array([aliveObjects]));
+            device.queue.writeBuffer(bufferA, 0, arr);
+
+            const shader = `
+                struct Config {
+                    count: u32
+                };
+
+                @group(0) @binding(2)
+                var<uniform> config : Config;
+
+                @group(0) @binding(0)
+                var<storage, read> input : array<f32>;   // leitura (estado atual)
+
+                @group(0) @binding(1)
+                var<storage, read_write> output : array<f32>; // escrita (próximo estado)
+
+                @compute @workgroup_size(64)
+                fn main(@builtin(global_invocation_id) id : vec3<u32>) {
+                    let N = config.count;
+                    let A = ${attr}u;
+
+                    if (id.x >= N) { return; }
+
+                    let i = id.x * A;
+
+                    let ax  = input[i];
+                    let ay  = input[i + 1u];
+                    var avx = input[i + 2u];
+                    var avy = input[i + 3u];
+                    let ar  = input[i + 4u];
+                    let ad  = input[i + 5u];
+                    let am  = input[i + 6u];
+                    var at  = input[i + 7u];
+
+                    // Percorre TODOS os outros — sem escrever neles
+                    for (var k = 0u; k < N; k++) {
+                        if (k == id.x) { continue; }
+                        let j = k * A;
+
+                        // Calcula distância entre partículas
+                        let dx = input[j] - ax;
+                        let dy = input[j + 1u] - ay;
+                        let dist_sq = (dx * dx) + (dy * dy);
+                        let dist_inv = inverseSqrt(dist_sq);
+                        let dist = dist_sq * dist_inv;
+
+                        let range = ar + input[j + 4u];
+                        let bm = input[j + 6u];
+
+                        // Colisão avaçada: se a distância for menor que a soma dos raios
+                        if (dist_sq <= range * range && dist_sq > 0.00001) {
+
+                            // normal da colisão
+                            let nx = dx * dist_inv;
+                            let ny = dy * dist_inv;
+
+                            // velocidade do outro objeto
+                            let bvx = input[j + 2u];
+                            let bvy = input[j + 3u];
+
+                            // velocidade relativa
+                            let rvx = bvx - avx;
+                            let rvy = bvy - avy;
+
+                            // velocidade relativa na direção da colisão
+                            let relVel = rvx * nx + rvy * ny;
+
+                            // evita resolver objetos separando
+                            if (relVel < 0.0) {
+
+                                // restituição
+                                // 1.0 = perfeitamente elástico
+                                // 0.0 = perde toda energia
+                                let restitution = 0.50;
+
+                                // impulso
+                                let impulse = -(1.0 + restitution) * relVel / ((1.0 / am) + (1.0 / bm));
+                                
+                                let ix = impulse * nx;
+                                let iy = impulse * ny;
+
+                                // aplica no objeto atual
+                                avx -= ix / am;
+                                avy -= iy / am;
+
+                                // separação anti-penetração
+                                let penetration = range - dist;
+
+                                avx -= nx * penetration * 0.02;
+                                avy -= ny * penetration * 0.02;
+
+                                let heatCapacity = 10.0; // coeficiente de capacidade térmica (futuramente variará de acordo com o material)
+                                at += (-0.5 * impulse * relVel * (1.0 - restitution)) / (am * heatCapacity) * 10000;
+
+                                // diferença térmica
+                                let conductivity = 0.1; // coeficiente de condução térmica (futuramete variara de acordo com o material)
+                                let tempDiff = input[j + 7u] - at;
+                                let contact = penetration / range;
+                                let heatFlow = tempDiff * conductivity * contact;
+
+                                // absorção proporcional à massa
+                                at += heatFlow / (  heatCapacity);
+
+                                if (dist_sq < range * range * 4.0) {
+                                    let thermalField = 0.00001 / dist_sq;
+                                    at += tempDiff * thermalField;
+                                }
+                            }
+                        }
+
+                        // Fórmula de força gravitacional: F = G * (m1 * m2) / d^2
+                        if (dist_sq > range * range) {
+                            let force = 6.674e-8 * (am * bm) / dist_sq;
+                            avx += force * (dx * dist_inv);
+                            avy += force * (dy * dist_inv);
+                        }
+                    }
+
+                    // resfriamento global (simula radiação para o espaço)
+                    let cooling = 0.9995;
+                    at *= cooling;
+
+                    // resfriamento por movimento (simula convecção)
+                    let speed2 = avx * avx + avy * avy;
+                    at -= speed2 * 0.00001;
+
+                    // Escreve APENAS no próprio índice — zero conflito
+                    output[i]      = ax + avx;
+                    output[i + 1u] = ay + avy;
+                    output[i + 2u] = avx;
+                    output[i + 3u] = avy;
+                    output[i + 4u] = ar; // raio — imutável (por enquanto)
+                    output[i + 5u] = ad;
+                    output[i + 6u] = am;
+                    output[i + 7u] = at; // temperatura — imutável (por enquanto)
+                }
+            `;
+
+            const computeModule = device.createShaderModule({ code: shader });
+            const computePipeline = device.createComputePipeline({
+                layout: "auto",
+                compute: {
+                    module: computeModule,
+                    entryPoint: "main"
+                }
+            });
+
+            const bindGroupAB = device.createBindGroup({
+                layout: computePipeline.getBindGroupLayout(0),
+                entries: [
+                    { binding: 0, resource: { buffer: bufferA } }, // input
+                    { binding: 1, resource: { buffer: bufferB } }, // output
+                    { binding: 2, resource: { buffer: configBuffer } },
+                ]
+            });
+
+            const bindGroupBA = device.createBindGroup({
+                layout: computePipeline.getBindGroupLayout(0),
+                entries: [
+                    { binding: 0, resource: { buffer: bufferB } },
+                    { binding: 1, resource: { buffer: bufferA } },
+                    { binding: 2, resource: { buffer: configBuffer } },
+                ]
+            });
+
+            const renderShader = `
+                struct Particle { x: f32, y: f32, vx: f32, vy: f32, r: f32, d: f32, m: f32, t: f32 };
+
+                @group(0) @binding(0)
+                var<storage, read> particles : array<Particle>;
+
+                struct VSOut {
+                    @builtin(position) pos : vec4<f32>,
+                    @location(0)       uv  : vec2<f32>,  // coordenada local do quad [-1,1]
+                    @location(1)       rad : f32,        // raio da partícula
+                    @location(2)       temp : f32,       // temperatura da partícula
+                };
+
+                const corners = array<vec2<f32>, 6>(
+                    vec2(-1.0, -1.0), vec2( 1.0, -1.0), vec2(-1.0,  1.0),
+                    vec2(-1.0,  1.0), vec2( 1.0, -1.0), vec2( 1.0,  1.0)
+                );
+
+                @vertex
+                fn vs(@builtin(vertex_index) vi : u32, @builtin(instance_index) pi : u32) -> VSOut {
+                    let ci     = vi % 6u;          // índice do canto
+                    let p      = particles[pi];
+
+                    let offset = corners[ci] * p.r * 1.5; // escala pelo raio
+                    var out: VSOut;
+                    out.pos = vec4<f32>(p.x + offset.x, p.y + offset.y, 0.0, 1.0);
+                    out.uv  = corners[ci];
+                    out.rad = p.r;
+                    out.temp = p.t;
+                    return out;
+                }
+
+                @fragment
+                fn fs(in: VSOut) -> @location(0) vec4<f32> {
+                    let d2 = dot(in.uv, in.uv);
+                    if (in.rad == 0.0) { return vec4<f32>(0.0); }
+
+                    // campo que decai com distância — soma dos vizinhos cria a ponte
+                    let field = 1.0 / (d2 + 0.01);
+
+                    // normaliza temperatura
+                    let temp = clamp(in.temp / 10.0, 0.0, 1.0);
+
+                    return vec4<f32>(field, temp ,0.0, 1.0);
+                }
+            `;
+
+            const renderModule = device.createShaderModule({ code: renderShader });
+
+            const fieldTexture = device.createTexture({
+                size: [canvas.width * .5, canvas.height * .5],
+                format: "rgba8unorm",           // canal único, ponto flutuante
+                usage:
+                    GPUTextureUsage.RENDER_ATTACHMENT |
+                    GPUTextureUsage.TEXTURE_BINDING
+            });
+
+            const fieldPipeline = device.createRenderPipeline({
+                layout: "auto",
+                vertex: { module: renderModule, entryPoint: "vs" },  // mesmo módulo do pass1
+                fragment: {
+                    module: renderModule, entryPoint: "fs",
+                    targets: [{
+                        format: "rgba8unorm",
+                        blend: {
+                            color: { srcFactor: "one", dstFactor: "one", operation: "add" },
+                            alpha: { srcFactor: "one", dstFactor: "one", operation: "add" }
+                        }
+                    }]
+                },
+                primitive: { topology: "triangle-list" }
+            });
+
+            const thresholdShader = `
+                @group(0) @binding(0) var fieldTex : texture_2d<f32>;
+                @group(0) @binding(1) var s        : sampler;
+
+                @vertex
+                fn vs(@builtin(vertex_index) i: u32) -> @builtin(position) vec4<f32> {
+                    let p = array<vec2<f32>,3>(
+                        vec2(-1.0,-1.0), vec2(3.0,-1.0), vec2(-1.0, 3.0)
+                    );
+                    return vec4<f32>(p[i], 0.0, 1.0);
+                }
+
+                @fragment
+                fn fs(@builtin(position) pos: vec4<f32>) -> @location(0) vec4<f32> {
+                    let uv    = pos.xy / vec2<f32>(${canvas.width}.0, ${canvas.height}.0);
+                    let sample = textureSample(fieldTex, s, uv);
+                    let field = sample.r;
+                    let temp  = sample.g;
+                    if (field < 1.0) { discard; }
+                    let cold = vec3<f32>(0.0, 0.2, 1.0);
+                    let hot  = vec3<f32>(1.0, 0.1, 0.0);
+                    let color = mix(cold, hot, temp);
+                    return vec4<f32>(color, .6);
+                }
+            `;
+
+            const thresholdModule = device.createShaderModule({ code: thresholdShader });
+            const thresholdPipeline = device.createRenderPipeline({
+                layout: "auto",
+                vertex: { module: thresholdModule, entryPoint: "vs" },
+                fragment: { module: thresholdModule, entryPoint: "fs", targets: [{ format }] },
+                primitive: { topology: "triangle-list" }
+            });
+
+
+            const fieldView = fieldTexture.createView();
+            const fieldSampler = device.createSampler({ minFilter: "linear" });
+            const fieldBindGroup = device.createBindGroup({
+                layout: thresholdPipeline.getBindGroupLayout(0),
+                entries: [
+                    { binding: 0, resource: fieldView },
+                    { binding: 1, resource: fieldSampler }
+                ]
+            });
+
+            const fieldBG_A = device.createBindGroup({
+                layout: fieldPipeline.getBindGroupLayout(0),
+                entries: [{ binding: 0, resource: { buffer: bufferA } }]
+            });
+
+            const fieldBG_B = device.createBindGroup({
+                layout: fieldPipeline.getBindGroupLayout(0),
+                entries: [{ binding: 0, resource: { buffer: bufferB } }]
+            });
+
+            // Teclado && Mouse
+            function deleteObject(index) {
+                const last = aliveObjects - 1;
+                if (index < 0 || index >= aliveObjects) return;
+
+                if (index !== last) {
+                    for (let k = 0; k < attr; k++) {
+                        arr[index * attr + k] = arr[last * attr + k];
+                    }
+                }
+
+                aliveObjects--;
+
+                device.queue.writeBuffer(configBuffer, 0, new Uint32Array([aliveObjects]));
+
+                const bytesPerParticle = attr * 4;
+                const startByte = index * bytesPerParticle;
+
+                device.queue.writeBuffer(
+                    bufferA,
+                    startByte,
+                    arr.buffer,
+                    startByte,
+                    bytesPerParticle
+                );
+
+                device.queue.writeBuffer(
+                    bufferB,
+                    startByte,
+                    arr.buffer,
+                    startByte,
+                    bytesPerParticle
+                );
+
+                const bytes = arr.byteLength;
+                const tamanhos = ['Bytes', 'KB', 'MB'];
+                const n = Math.floor(Math.log(bytes) / Math.log(1024));
+                const s = parseFloat((bytes / Math.pow(1024, n)).toFixed(2)) + ' ' + tamanhos[n];
+                console.log(`Size [${aliveObjects}][${arr.length}]: ${s}`); // 64 ints | 1024 KBs
+            }
+
+            window.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    deleteObject(Math.floor(Math.random() * aliveObjects));
+                }
+            });
+
+            // Loop
+            let frame = 0;
+            let frameCount = 0;
+            let lastTime = performance.now();
+
+            function tick() {
+                const now = performance.now();
+                frameCount++;
+
+                if (now - lastTime >= 1000) {
+                    console.log(`FPS: ${frameCount}`);
+                    frameCount = 0;
+                    lastTime = now;
+                }
+
+                //
+                const isEven = frame % 2 === 0;
+                const computeBG = isEven ? bindGroupAB : bindGroupBA;
+                const fieldBG = isEven ? fieldBG_B : fieldBG_A;
+
+                // --- compute pass ---
+                const encoder = device.createCommandEncoder();
+                const cPass = encoder.beginComputePass(
+                    useTS ? {
+                        timestampWrites: {
+                            querySet: qs,
+                            beginningOfPassWriteIndex: 0,
+                            endOfPassWriteIndex: 1
+                        }
+                    } : undefined
+                );
+                cPass.setPipeline(computePipeline);
+                cPass.setBindGroup(0, computeBG);
+                cPass.dispatchWorkgroups(Math.ceil(aliveObjects / 64));
+                cPass.end();
+
+                // --- render pass ---
+                // --- pass 1: campo escalar → fieldTexture ---
+                const rPass1 = encoder.beginRenderPass({
+                    colorAttachments: [{
+                        view: fieldView,
+                        clearValue: { r: 0, g: 0, b: 0, a: 0 },
+                        loadOp: "clear",
+                        storeOp: "store"
+                    }]
+                });
+                rPass1.setPipeline(fieldPipeline);
+                rPass1.setBindGroup(0, fieldBG);
+                rPass1.draw(6, aliveObjects);
+                rPass1.end();
+
+                // --- pass 2: threshold → canvas ---
+                const rPass2 = encoder.beginRenderPass({
+                    colorAttachments: [{
+                        view: context.getCurrentTexture().createView(),
+                        clearValue: { r: 0, g: 0, b: 0, a: 1 },
+                        loadOp: "clear",
+                        storeOp: "store"
+                    }]
+                });
+                rPass2.setPipeline(thresholdPipeline);
+                rPass2.setBindGroup(0, fieldBindGroup);
+                rPass2.draw(3); // triângulo que cobre a tela
+                rPass2.end();
+
+                if (useTS) encoder.resolveQuerySet(qs, 0, 2, qbuf, 0);
+                device.queue.submit([encoder.finish()]);
+
+                frame++;
+                requestAnimationFrame(tick);
+            }
+            tick();
+        }
+        catch (e) {
+            console.error("Erro: ", e);
+        }
+    </script>
+</body>
+
+</html>
