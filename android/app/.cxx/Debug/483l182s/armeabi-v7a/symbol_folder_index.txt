@@ -1,0 +1,1 @@
+E:\Documentos\GitHub\OpenGL-GLFW\build\android\intermediates\cxx\Debug\483l182s\obj\armeabi-v7a

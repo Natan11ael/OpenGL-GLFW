@@ -5,3 +5,4 @@ buildscript {
 allprojects {
     repositories { google(); mavenCentral() }
 }
+buildDir = file("../build/android")

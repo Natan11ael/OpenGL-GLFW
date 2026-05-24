@@ -61,8 +61,17 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = E:\ProgramData\Android\Sdk\cmake\3.22.1\bin\cmake.exe --regenerate-during-build -S"E:\Documentos\GitHub\Between Worlds\core\android\app" -B"E:\Documentos\GitHub\Between Worlds\core\android\app\.cxx\Debug\3x585j6l\armeabi-v7a"
+  command = E:\ProgramData\Android\Sdk\cmake\3.22.1\bin\cmake.exe --regenerate-during-build -SE:\Documentos\GitHub\OpenGL-GLFW\android\app -BE:\Documentos\GitHub\OpenGL-GLFW\android\app\.cxx\Debug\3x585j6l\armeabi-v7a
   description = Re-running CMake...
+  generator = 1
+
+
+#############################################
+# Rule for re-checking globbed directories.
+
+rule VERIFY_GLOBS
+  command = E:\ProgramData\Android\Sdk\cmake\3.22.1\bin\cmake.exe -P E:\Documentos\GitHub\OpenGL-GLFW\android\app\.cxx\Debug\3x585j6l\armeabi-v7a\CMakeFiles\VerifyGlobs.cmake
+  description = Re-checking globbed directories...
   generator = 1
 
 

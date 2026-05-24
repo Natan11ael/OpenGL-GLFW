@@ -8,8 +8,12 @@
 //
 
 // OpenGL e GLFW headers
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#ifdef ANDROID
+    #include <GLES3/gl3.h>
+#else
+    #include <glad/glad.h>
+    #include <GLFW/glfw3.h>
+#endif
 
 // Engine headers
 #include "GLMesh.hpp"

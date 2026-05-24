@@ -1,6 +1,6 @@
 // @file main.cpp
-// @brief Exemplo de programa que carrega uma textura usando stb_image e a exibe em um quadrado usando OpenGL e GLFW
-// @details Este programa demonstra como usar a biblioteca stb_image para carregar uma imagem, criar uma textura OpenGL e renderizá-la em um quadrado que cobre toda a janela. Ele também inclui shaders simples para passar as coordenadas de textura e amostrar a textura no fragment shader.
+// @brief Template de programa para Windows usando OpenGL e GLFW, com uma classe GLWindow que gerencia a janela e os eventos no Windows
+// @details Este programa serve como um ponto de partida para criar aplicativos Windows que utilizam OpenGL para renderização. Ele inclui uma classe GLWindow que gerencia a janela, o contexto OpenGL e os eventos usando GLFW. O programa também define um loop principal de eventos para processar entradas e renderizar continuamente até que a janela seja fechada.
 //
 // @author Natanael de Sousa
 // @date 2026-05-22
@@ -66,7 +66,7 @@ void Sprite(GLMesh *layer, GLShader *shader, unsigned int image, glm::vec2 posit
 class MyProgram : public GLWindow
 {
 public:
-    MyProgram() : GLWindow(800, 600, "OpenGL Texture Example") {}
+    MyProgram() : GLWindow(800, 600, "OpenGL Example") {}
 
     // Função para executar o loop de eventos da janela
     void RunEventLoop()
@@ -74,8 +74,8 @@ public:
         // Configura o dataset para o loop de eventos
 
         // Carrega os shaders usando a classe GLShader.
-        GLShader shader;                                                                          // Cria uma instância do shader para gerenciar o programa de shader OpenGL
-        if (!shader.Load("src/assets/Shaders/point.vs.glsl", "src/assets/Shaders/point.fs.glsl")) // Carrega os shaders de vértice e fragmento a partir dos arquivos
+        GLShader shader;                                                    // Cria uma instância do shader para gerenciar o programa de shader OpenGL
+        if (!shader.Load("Shaders/point.vs.glsl", "Shaders/point.fs.glsl")) // Carrega os shaders de vértice e fragmento a partir dos arquivos
         {
             std::cerr << "Falha ao carregar shaders. Verifique os caminhos.\n";
             return;
@@ -98,7 +98,7 @@ public:
 
         // Carrega a textura usando a classe GLImage.
         GLImage texture;                                    // Cria uma instância do GLImage para gerenciar a textura do programa
-        if (!texture.Load("src/assets/Textures/image.png")) // Carrega a textura a partir do arquivo usando stb_image e cria uma textura OpenGL
+        if (!texture.Load("Textures/image.png")) // Carrega a textura a partir do arquivo usando stb_image e cria uma textura OpenGL
         {
             std::cerr << "Falha ao carregar imagem. Verifique o caminho.\n";
             return;
@@ -128,7 +128,7 @@ public:
 // Função principal do programa
 int main()
 {
-    MyProgram program;      // Cria uma instância do programa que gerencia a janela e o contexto OpenGL
-    program.RunEventLoop(); // Executa o loop de eventos da janela, que inclui a lógica de renderização
-    return 0;               // Retorna 0 para indicar que o programa terminou com sucesso
+    MyProgram myProgram;      // Cria uma instância do programa que gerencia a janela e o contexto OpenGL
+    myProgram.RunEventLoop(); // Executa o loop de eventos da janela, que inclui a lógica de renderização
+    return 0;                 // Retorna 0 para indicar que o programa terminou com sucesso
 }

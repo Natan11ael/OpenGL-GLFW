@@ -31,7 +31,44 @@
             "cppStandard": "c++17",
             "browse": {
                 "path": [
-                    "${workspaceFolder}/windows/include/**",
+                    "${workspaceFolder}/windows/src/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "intelliSenseMode": "windows-msvc-x64"
+        },
+        {
+            "name": "Android-MSVC",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/windows/src/**",
+                "E:/Program Files/Microsoft Visual Studio/18/Enterprise/VC/Tools/MSVC/14.50.35717/include",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/ucrt",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/shared",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/um",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt",
+                "${workspaceFolder}/android/app/src/main/cpp/**",
+                "E:/ProgramData/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include",
+                "E:/ProgramData/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/x86_64-linux-android",
+                "E:/ProgramData/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/i686-linux-android",
+                "E:/ProgramData/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/arm-linux-androideabi",
+                "E:/ProgramData/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/aarch64-linux-android",
+                "E:/ProgramData/Android/Sdk/ndk/25.1.8937393/sources/android/native_app_glue"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "GLEW_STATIC",
+                "ANDROID"
+            ],
+            "windowsSdkVersion": "10.0.26100.0",
+            "compilerPath": "C:/Program Files/Microsoft Visual Studio/18/Enterprise/VC/Tools/MSVC/14.50.35717/bin/Hostx64/x64/cl.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "browse": {
+                "path": [
                     "${workspaceFolder}/windows/src/**"
                 ],
                 "limitSymbolsToIncludedHeaders": true

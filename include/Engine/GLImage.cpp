@@ -12,27 +12,57 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
-// OpenGL e GLFW headers
-#include <glm/glm.hpp>
+#ifdef ANDROID
+#include <GLES3/gl3.h>
+#include <android/asset_manager.h>
+#define ASSETS_PATH ""
+#else
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#define ASSETS_PATH "src/assets/"
+#endif
 
 // Engine headers
 #include "GLImage.hpp"
+#include "Engine/GLLog.hpp"
 
 // C++ standard library
-#include <iostream>
+#include <string>
+
 
 // Função para carregar recursos de textura usando stb_image e criar texturas OpenGL
-bool GLImage::Load(const char *path)
+bool GLImage::Load(const char *path
+#ifdef ANDROID
+    ,
+    AAssetManager *am
+#endif
+)
 {
     stbi_set_flip_vertically_on_load(true);
 
+    std::string _path = std::string(ASSETS_PATH) + path;
+
     int width, height, channels;
-    unsigned char *data = stbi_load(path, &width, &height, &channels, STBI_rgb_alpha);
-    if (!data)
+    unsigned char *data;
+#ifdef ANDROID
+    AAsset *asset = AAssetManager_open(am, _path.c_str(), AASSET_MODE_BUFFER);
+    if (!asset)
     {
-        std::cerr << "Falha ao carregar imagem: " << path << "\n";
+        LOGE("Falha ao abrir imagem: %s", _path.c_str());
+        return false;
+    }
+
+    size_t size = AAsset_getLength(asset);
+    const unsigned char *buffer = (const unsigned char *)AAsset_getBuffer(asset);
+    data = stbi_load_from_memory(buffer, (int)size, &width, &height, &channels, STBI_rgb_alpha);
+    AAsset_close(asset);
+#else
+    data = stbi_load(_path.c_str(), &width, &height, &channels, STBI_rgb_alpha);
+#endif
+
+    if (!data) 
+    {
+        LOGE("Falha ao carregar imagem: %s", _path.c_str());
         return false;
     }
 

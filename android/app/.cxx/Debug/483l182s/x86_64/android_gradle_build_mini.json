@@ -1,0 +1,33 @@
+{
+  "buildFiles": [
+    "E:\\Documentos\\GitHub\\OpenGL-GLFW\\android\\app\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "E:\\ProgramData\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "E:\\Documentos\\GitHub\\OpenGL-GLFW\\android\\app\\.cxx\\Debug\\483l182s\\x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "E:\\ProgramData\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "E:\\Documentos\\GitHub\\OpenGL-GLFW\\android\\app\\.cxx\\Debug\\483l182s\\x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "native-lib::@6890427a1f51a3e7e1df": {
+      "artifactName": "native-lib",
+      "abi": "x86_64",
+      "output": "E:\\Documentos\\GitHub\\OpenGL-GLFW\\build\\android\\intermediates\\cxx\\Debug\\483l182s\\obj\\x86_64\\libnative-lib.so",
+      "runtimeFiles": []
+    },
+    "native-app-glue::@6890427a1f51a3e7e1df": {
+      "artifactName": "native-app-glue",
+      "abi": "x86_64",
+      "output": "E:\\Documentos\\GitHub\\OpenGL-GLFW\\android\\app\\.cxx\\Debug\\483l182s\\x86_64\\libnative-app-glue.a",
+      "runtimeFiles": []
+    }
+  }
+}

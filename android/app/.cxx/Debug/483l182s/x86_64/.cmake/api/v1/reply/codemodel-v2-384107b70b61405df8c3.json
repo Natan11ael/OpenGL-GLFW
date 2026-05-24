@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "MyApp",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "native-app-glue::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-native-app-glue-Debug-fb9c19a8d08af6bfd413.json",
+					"name" : "native-app-glue",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "native-lib::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-native-lib-Debug-e9e41d72a54b23fa93a2.json",
+					"name" : "native-lib",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "E:/Documentos/GitHub/OpenGL-GLFW/android/app/.cxx/Debug/483l182s/x86_64",
+		"source" : "E:/Documentos/GitHub/OpenGL-GLFW/android/app"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

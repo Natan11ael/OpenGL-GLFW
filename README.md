@@ -72,9 +72,7 @@ cmake --build build
 ### Android
 
 ```powershell
-cd \android
-.\gradlew clean
-.\gradlew assembleDebug
+cmd /c "cd android && gradlew clean assembleDebug"
 ```
 
 Para iniciar o emulador Android:

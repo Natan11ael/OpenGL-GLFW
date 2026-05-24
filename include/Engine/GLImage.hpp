@@ -20,7 +20,11 @@ private:
     unsigned int asset_id; // ID do recurso de textura OpenGL
 
 public:
-    bool Load(const char *path); // Função para carregar recursos de textura usando stb_image e criar texturas OpenGL
+    bool Load(const char *path
+#ifdef ANDROID
+    ,AAssetManager *am
+#endif
+);                               // Função para carregar recursos de textura usando stb_image e criar texturas OpenGL
     unsigned int Get() const;    // Função para obter o ID da textura OpenGL carregada
     void Delete();               // Função para deletar a textura OpenGL e liberar os recursos associados
 };

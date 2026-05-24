@@ -1,0 +1,18 @@
+                        -HE:\Documentos\GitHub\OpenGL-GLFW\android\app
+-DCMAKE_SYSTEM_NAME=Android
+-DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+-DCMAKE_SYSTEM_VERSION=24
+-DANDROID_PLATFORM=android-24
+-DANDROID_ABI=x86_64
+-DCMAKE_ANDROID_ARCH_ABI=x86_64
+-DANDROID_NDK=E:\ProgramData\Android\Sdk\ndk\25.1.8937393
+-DCMAKE_ANDROID_NDK=E:\ProgramData\Android\Sdk\ndk\25.1.8937393
+-DCMAKE_TOOLCHAIN_FILE=E:\ProgramData\Android\Sdk\ndk\25.1.8937393\build\cmake\android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=E:\ProgramData\Android\Sdk\cmake\3.22.1\bin\ninja.exe
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=E:\Documentos\GitHub\OpenGL-GLFW\build\android\intermediates\cxx\Debug\483l182s\obj\x86_64
+-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=E:\Documentos\GitHub\OpenGL-GLFW\build\android\intermediates\cxx\Debug\483l182s\obj\x86_64
+-DCMAKE_BUILD_TYPE=Debug
+-BE:\Documentos\GitHub\OpenGL-GLFW\android\app\.cxx\Debug\483l182s\x86_64
+-GNinja
+                        Build command args: []
+                        Version: 2

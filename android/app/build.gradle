@@ -17,4 +17,12 @@ android {
     externalNativeBuild {
         cmake { path "CMakeLists.txt" }
     }
+
+    sourceSets {
+        main {
+            assets.srcDirs = ['../../src/assets']
+        }
+    }
 }
+
+layout.buildDirectory = file("../../build/android")

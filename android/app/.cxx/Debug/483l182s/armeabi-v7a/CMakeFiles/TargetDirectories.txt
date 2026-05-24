@@ -1,0 +1,4 @@
+E:/Documentos/GitHub/OpenGL-GLFW/android/app/.cxx/Debug/483l182s/armeabi-v7a/CMakeFiles/native-lib.dir
+E:/Documentos/GitHub/OpenGL-GLFW/android/app/.cxx/Debug/483l182s/armeabi-v7a/CMakeFiles/native-app-glue.dir
+E:/Documentos/GitHub/OpenGL-GLFW/android/app/.cxx/Debug/483l182s/armeabi-v7a/CMakeFiles/edit_cache.dir
+E:/Documentos/GitHub/OpenGL-GLFW/android/app/.cxx/Debug/483l182s/armeabi-v7a/CMakeFiles/rebuild_cache.dir

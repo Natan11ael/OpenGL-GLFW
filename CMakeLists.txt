@@ -22,9 +22,5 @@ message(STATUS "CORE = ${CORE_SOURCES}")
 # Transforma CORE_SOURCES em global para que as subpastas consigam lê-la
 set(CORE_SOURCES ${CORE_SOURCES} CACHE INTERNAL "Fontes comuns do projeto")
 
-# 2. Iniciliza a compilação do executavel com os arquivos fontes do core para plataforma respectiva
-if(WIN32)
-    add_subdirectory(windows)
-elseif(ANDROID)
-    add_subdirectory(android)
-endif()
+# 2. Adiciona as subpastas do projeto e compila os arquivos fontes
+add_subdirectory(windows)

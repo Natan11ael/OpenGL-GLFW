@@ -1,19 +1,19 @@
 {
   "buildFiles": [
-    "E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\CMakeLists.txt"
+    "E:\\Documentos\\GitHub\\OpenGL-GLFW\\android\\app\\CMakeLists.txt"
   ],
   "cleanCommandsComponents": [
     [
       "E:\\ProgramData\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
       "-C",
-      "E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\.cxx\\Debug\\3x585j6l\\arm64-v8a",
+      "E:\\Documentos\\GitHub\\OpenGL-GLFW\\android\\app\\.cxx\\Debug\\3x585j6l\\arm64-v8a",
       "clean"
     ]
   ],
   "buildTargetsCommandComponents": [
     "E:\\ProgramData\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
     "-C",
-    "E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\.cxx\\Debug\\3x585j6l\\arm64-v8a",
+    "E:\\Documentos\\GitHub\\OpenGL-GLFW\\android\\app\\.cxx\\Debug\\3x585j6l\\arm64-v8a",
     "{LIST_OF_TARGETS_TO_BUILD}"
   ],
   "libraries": {
@@ -21,13 +21,13 @@
       "toolchain": "toolchain",
       "abi": "arm64-v8a",
       "artifactName": "native-app-glue",
-      "output": "E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\.cxx\\Debug\\3x585j6l\\arm64-v8a\\libnative-app-glue.a"
+      "output": "E:\\Documentos\\GitHub\\OpenGL-GLFW\\android\\app\\.cxx\\Debug\\3x585j6l\\arm64-v8a\\libnative-app-glue.a"
     },
     "native-lib::@6890427a1f51a3e7e1df": {
       "toolchain": "toolchain",
       "abi": "arm64-v8a",
       "artifactName": "native-lib",
-      "output": "E:\\Documentos\\GitHub\\Between Worlds\\core\\android\\app\\build\\intermediates\\cxx\\Debug\\3x585j6l\\obj\\arm64-v8a\\libnative-lib.so",
+      "output": "E:\\Documentos\\GitHub\\OpenGL-GLFW\\android\\app\\build\\intermediates\\cxx\\Debug\\3x585j6l\\obj\\arm64-v8a\\libnative-lib.so",
       "runtimeFiles": []
     }
   },
