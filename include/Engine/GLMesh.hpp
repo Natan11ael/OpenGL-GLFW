@@ -8,6 +8,14 @@
 //
 #pragma once
 
+// OpenGL e GLFW headers
+#ifdef ANDROID
+#include <GLES3/gl3.h>
+#else
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#endif
+
 // C++ standard library
 #include <vector>
 
@@ -23,12 +31,13 @@ struct GLVertexAttribute
 class GLMesh
 {
 private:
-    unsigned int VAO, VBO, EBO; // IDs do Vertex Array Object, Vertex Buffer Object e Element Buffer Object usados para armazenar os dados de vértice e índice do mesh
-    int vertex_count;           // Número de vértices no mesh, usado para desenhar o mesh corretamente
+    unsigned int VAO, VBO, EBO;    // IDs do Vertex Array Object, Vertex Buffer Object e Element Buffer Object usados para armazenar os dados de vértice e índice do mesh
+    unsigned int type;             //
+    int vertex_count, array_count; // Número de vértices no mesh, usado para desenhar o mesh corretamente
 
 public:
-    ~GLMesh();                                                                                                                                  // Destrutor para limpar os recursos do VAO, VBO e EBO
-    bool Load(float *vertices, size_t vertex_size, unsigned int *indices, size_t index_size, const std::vector<GLVertexAttribute> &attributes); // Função para carregar os dados de vértice e índice para o mesh e configurar os buffers OpenGL
-    void Draw();                                                                                                                                // Função para desenhar o mesh usando os buffers configurados
-    void Delete();                                                                                                                              // Função para limpar os recursos do VAO, VBO e EBO associados ao mesh
+    ~GLMesh();                                                                                                                                                                      // Destrutor para limpar os recursos do VAO, VBO e EBO
+    bool Load(float *vertices, size_t vertex_size, unsigned int *indices, size_t index_size, const std::vector<GLVertexAttribute> &attributes, unsigned int mesh_type = GL_POINTS); // Função para carregar os dados de vértice e índice para o mesh e configurar os buffers OpenGL
+    void Draw();                                                                                                                                                                    // Função para desenhar o mesh usando os buffers configurados
+    void Delete();                                                                                                                                                                  // Função para limpar os recursos do VAO, VBO e EBO associados ao mesh
 };

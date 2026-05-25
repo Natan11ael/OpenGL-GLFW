@@ -1,8 +1,8 @@
-layout(location = 0) in vec2 aPos;
-layout(location = 1) in vec2 aTex;
+layout(location = 0) in vec2 a_pos;
 
-out vec2 vTex;
+uniform vec2 u_pos;
+
 void main() {
-    vTex = aTex;
-    gl_Position = vec4(aPos, 0.0, 1.0);
+    gl_Position = vec4(a_pos + u_pos, 0.0, 1.0);
+    gl_PointSize = 1.0;
 }

@@ -7,14 +7,6 @@
 // ------------------------------------------------------------------------------------------------------
 //
 
-// OpenGL e GLFW headers
-#ifdef ANDROID
-    #include <GLES3/gl3.h>
-#else
-    #include <glad/glad.h>
-    #include <GLFW/glfw3.h>
-#endif
-
 // Engine headers
 #include "GLMesh.hpp"
 
@@ -24,11 +16,9 @@ GLMesh::~GLMesh() // Destrutor para limpar os recursos do VAO, VBO e EBO
 }
 
 // Função para carregar os dados de vértice e índice para o mesh e configurar os buffers OpenGL
-bool GLMesh::Load(float *vertices, size_t vertex_size, unsigned int *indices, size_t index_size, const std::vector<GLVertexAttribute> &attributes)
+bool GLMesh::Load(float *vertices, size_t vertex_size, unsigned int *indices, size_t index_size, const std::vector<GLVertexAttribute> &attributes, unsigned int mesh_type)
 {
     Delete(); // Limpa os recursos anteriores, se houver
-
-    vertex_count = (int)(index_size / sizeof(unsigned int));
 
     // Gerencia os buffers de vértice e array de vértice para o mesh
     glGenVertexArrays(1, &VAO);
@@ -75,16 +65,22 @@ bool GLMesh::Load(float *vertices, size_t vertex_size, unsigned int *indices, si
             offset += attr.size * sizeof(unsigned char);
     }
 
+    //
+    vertex_count = (int)(index_size / sizeof(unsigned int));
+    array_count = (int)(vertex_size / (sizeof(float) * total_components));
+    type = mesh_type;
+
     glBindVertexArray(0); // Unbind VAO
     return true;
 }
 
 void GLMesh::Draw()
 {
-    if (vertex_count == 0)
-        return;
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, vertex_count, GL_UNSIGNED_INT, 0);
+    if (vertex_count > 0)
+        glDrawElements(type, vertex_count, GL_UNSIGNED_INT, 0);
+    else
+        glDrawArrays(type, 0, array_count);
     glBindVertexArray(0);
 }
 

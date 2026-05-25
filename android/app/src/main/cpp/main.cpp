@@ -14,6 +14,10 @@ extern "C" void app_dummy();
 #endif
 //
 
+// OpenGL e GLFW headers
+#include <glm/glm.hpp>
+#include <GLES3/gl3.h>
+
 // Engine headers
 #include "GLAndroid.hpp"
 #include "Engine/GLImage.hpp"
@@ -31,9 +35,9 @@ public:
     void RunEventLoop() override
     {
         // Configura o dataset para o loop de eventos
-        GLImage image;
-        GLShader shader;
-        GLMesh mesh;
+        GLShader s_point, s_line, s_triangle, s_rect, s_ellipse, s_metalball, s_sprite;
+        GLMesh m_point, m_line, m_triangle, m_rect, m_ellipse, m_metalball, m_sprite;
+        GLImage img_sprite;
         bool loaded = false;
 
         // Loop principal de eventos do Android para processar entradas e renderizar continuamente até que a janela seja fechada
@@ -51,28 +55,74 @@ public:
             // 
             if (!loaded)
             {
+                //
                 // Carrega os shaders usando a classe GLShader.
-                if (!shader.Load("Shaders/point.vs.glsl", "Shaders/point.fs.glsl", g_app->activity->assetManager))
+                if (!s_point.Load("Shaders/point.vs.glsl", "Shaders/point.fs.glsl", g_app->activity->assetManager)) // Carrega os shaders de vértice e fragmento a partir dos arquivos
+                    LOGE("Falha ao carregar shaders.");
+
+                // Cria um quadrado cobrindo toda a tela e obtém o ID do VAO para renderização
+                float v_point[] = {0.0f, 0.0f};
+                std::vector<GLVertexAttribute> att_point = {
+                    {0, 2, GL_FLOAT}, // Atributo de posição (index 0, 2 componentes, tipo float)
+                };
+
+                // Carrega os dados de vértice e índice para o mesh e configura os buffers
+                if (!m_point.Load(v_point, sizeof(v_point), nullptr, 0, att_point, GL_POINTS))
+                    LOGE("Falha ao carregar mesh.");
+
+                //
+                // Carrega os shaders usando a classe GLShader.
+                if (!s_line.Load("Shaders/line.vs.glsl", "Shaders/line.fs.glsl", g_app->activity->assetManager)) // Carrega os shaders de vértice e fragmento a partir dos arquivos
+                    LOGE("Falha ao carregar shaders.");
+
+                // Cria um quadrado cobrindo toda a tela e obtém o ID do VAO para renderização
+                float v_line[] = {0.0f, 0.0f, 1.0f, 1.0f};
+                std::vector<GLVertexAttribute> att_line = {
+                    {0, 2, GL_FLOAT}, // Atributo de posição (index 0, 2 componentes, tipo float)
+                };
+
+                // Carrega os dados de vértice e índice para o mesh e configura os buffers
+                if (!m_line.Load(v_line, sizeof(v_line), nullptr, 0, att_line, GL_LINES))
+                    LOGE("Falha ao carregar mesh.");
+
+                //
+                // Carrega os shaders usando a classe GLShader.
+                if (!s_triangle.Load("Shaders/triangle.vs.glsl", "Shaders/triangle.fs.glsl", g_app->activity->assetManager)) // Carrega os shaders de vértice e fragmento a partir dos arquivos
+                    LOGE("Falha ao carregar shaders.");
+
+                // Cria um quadrado cobrindo toda a tela e obtém o ID do VAO para renderização
+                float v_triangle[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
+                std::vector<GLVertexAttribute> att_triangle = {
+                    {0, 2, GL_FLOAT}, // Atributo de posição (index 0, 2 componentes, tipo float)
+                };
+
+                // Carrega os dados de vértice e índice para o mesh e configura os buffers
+                if (!m_triangle.Load(v_triangle, sizeof(v_triangle), nullptr, 0, att_triangle, GL_LINE_LOOP)) // GL_LINE_LOOP = linhas | GL_TRIANGLES = solido
+                    LOGE("Falha ao carregar mesh.");
+                
+                //
+                // Carrega os shaders usando a classe GLShader.
+                if (!s_sprite.Load("Shaders/sprite.vs.glsl", "Shaders/sprite.fs.glsl", g_app->activity->assetManager))
                     LOGE("Falha ao carregar shaders. Verifique os caminhos.");
 
                 // Cria um quadrado cobrindo toda a tela e obtém o ID do VAO para renderização
-                float vertices[] = {
+                 float v_sprite[] = {
                     -1.0f, -1.0f, 0.0f, 0.0f,
                     1.0f, -1.0f, 1.0f, 0.0f,
                     1.0f, 1.0f, 1.0f, 1.0f,
                     -1.0f, 1.0f, 0.0f, 1.0f};
-                unsigned int indices[] = {0, 1, 2, 2, 3, 0};
-                std::vector<GLVertexAttribute> attributes = {
+                unsigned int id_sprite[] = {0, 1, 2, 2, 3, 0};
+                std::vector<GLVertexAttribute> att_sprite = {
                     {0, 2, GL_FLOAT}, // Atributo de posição (index 0, 2 componentes, tipo float)
                     {1, 2, GL_FLOAT}  // Atributo de coordenadas de textura (index 1, 2 componentes, tipo float)
                 };
 
                 // Carrega os dados de vértice e índice para o mesh e configura os buffers
-                if (!mesh.Load(vertices, sizeof(vertices), indices, sizeof(indices), attributes))
+                if (!m_sprite.Load(v_sprite, sizeof(v_sprite), id_sprite, sizeof(id_sprite), att_sprite, GL_TRIANGLES))
                     LOGE("Falha ao carregar mesh.");
 
                 // Carrega a textura usando a classe GLImage.
-                if (!image.Load("Textures/image.png", g_app->activity->assetManager)) // Carrega a textura a partir do arquivo usando stb_image e cria uma textura OpenGL
+                if (!img_sprite.Load("Textures/image.png", g_app->activity->assetManager)) // Carrega a textura a partir do arquivo usando stb_image e cria uma textura OpenGL
                     LOGE("Falha ao carregar imagem. Verifique o caminho.");
 
                 loaded = true;
@@ -81,17 +131,54 @@ public:
             // Renderiza o conteúdo da janela (aqui você pode adicionar suas chamadas de renderização OpenGL)
             glClear(GL_COLOR_BUFFER_BIT);
 
-            //
-            shader.Use();
-            glUniform1i(glGetUniformLocation(shader.Get(), "uTexture"), 0);
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, image.Get());
-            mesh.Draw();
+            // Render Point
+            s_point.Use();
+            const glm::vec2 p_point{0.0f, 0.0f};
+            glUniform2fv(glGetUniformLocation(s_point.Get(), "u_pos"), 1, &p_point.x);
+            glUniform4f(glGetUniformLocation(s_point.Get(), "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            m_point.Draw();
+
+            // Render Line
+            s_line.Use();
+            const glm::vec2 l_points[2]{{-0.4f, 0.4f}, {0.4f, 0.4f}};
+            glUniform2fv(glGetUniformLocation(s_line.Get(), "u_point"), 2, &l_points[0].x);
+            glUniform4f(glGetUniformLocation(s_line.Get(), "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            m_line.Draw();
+
+            // Render Triangle
+            s_triangle.Use();
+            const glm::vec2 t_points[3]{{-0.4f, -0.4f}, {0.4f, -0.4f}, {0.0f, 0.4f}};
+            glUniform2fv(glGetUniformLocation(s_triangle.Get(), "u_point"), 3, &t_points[0].x);
+            glUniform4f(glGetUniformLocation(s_triangle.Get(), "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            glLineWidth(2.0f);
+            m_triangle.Draw();
+
+            // Render Sprite
+            //s_sprite.Use();
+            //glUniform1i(glGetUniformLocation(s_sprite.Get(), "uTexture"), 0);
+            //glActiveTexture(GL_TEXTURE0);
+            //glBindTexture(GL_TEXTURE_2D, img_sprite.Get());
+            //m_sprite.Draw();
 
             SwapBuffers(); // Troca os buffers para exibir o conteúdo renderizado
         }
 
-        shader.Delete(); // Deleta o programa de shader para liberar os recursos associados
+        // D
+        s_point.Delete();
+        s_line.Delete();
+        s_triangle.Delete();
+        s_rect.Delete();
+        s_ellipse.Delete();
+        s_metalball.Delete();
+        s_sprite.Delete();
+        m_point.Delete();
+        m_line.Delete();
+        m_triangle.Delete();
+        m_rect.Delete();
+        m_ellipse.Delete();
+        m_metalball.Delete();
+        m_sprite.Delete();
+        img_sprite.Delete();
     }
 };
 
