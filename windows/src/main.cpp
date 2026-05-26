@@ -102,13 +102,61 @@ public:
                     LOGE("Falha ao carregar shaders.");
 
                 // Cria um quadrado cobrindo toda a tela e obtém o ID do VAO para renderização
-                float v_triangle[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
+                float v_triangle[] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
                 std::vector<GLVertexAttribute> att_triangle = {
                     {0, 2, GL_FLOAT}, // Atributo de posição (index 0, 2 componentes, tipo float)
                 };
 
                 // Carrega os dados de vértice e índice para o mesh e configura os buffers
-                if (!m_triangle.Load(v_triangle, sizeof(v_triangle), nullptr, 0, att_triangle, GL_LINE_LOOP)) // GL_LINE_LOOP = linhas | GL_TRIANGLES = solido
+                if (!m_triangle.Load(v_triangle, sizeof(v_triangle), nullptr, 0, att_triangle, GL_TRIANGLES)) // GL_LINE_LOOP = linhas | GL_TRIANGLES = solido
+                    LOGE("Falha ao carregar mesh.");
+
+                //
+                // Carrega os shaders usando a classe GLShader.
+                if (!s_rect.Load("Shaders/rect.vs.glsl", "Shaders/rect.fs.glsl")) // Carrega os shaders de vértice e fragmento a partir dos arquivos
+                    LOGE("Falha ao carregar shaders.");
+
+                // Cria um quadrado cobrindo toda a tela e obtém o ID do VAO para renderização
+                float v_rect[] = {-1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f};
+                unsigned int id_rect[] = {0, 1, 2, 2, 3, 0};
+                std::vector<GLVertexAttribute> att_rect = {
+                    {0, 2, GL_FLOAT}, // Atributo de posição (index 0, 2 componentes, tipo float)
+                };
+
+                // Carrega os dados de vértice e índice para o mesh e configura os buffers
+                if (!m_rect.Load(v_rect, sizeof(v_rect), id_rect, sizeof(id_rect), att_rect, GL_TRIANGLES))
+                    LOGE("Falha ao carregar mesh.");
+
+                //
+                // Carrega os shaders usando a classe GLShader.
+                if (!s_ellipse.Load("Shaders/ellipse.vs.glsl", "Shaders/ellipse.fs.glsl")) // Carrega os shaders de vértice e fragmento a partir dos arquivos
+                    LOGE("Falha ao carregar shaders.");
+
+                // Cria um quadrado cobrindo toda a tela e obtém o ID do VAO para renderização
+                float v_ellipse[] = {-1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f};
+                unsigned int id_ellipse[] = {0, 1, 2, 2, 3, 0};
+                std::vector<GLVertexAttribute> att_ellipse = {
+                    {0, 2, GL_FLOAT}, // Atributo de posição (index 0, 2 componentes, tipo float)
+                };
+
+                // Carrega os dados de vértice e índice para o mesh e configura os buffers
+                if (!m_ellipse.Load(v_ellipse, sizeof(v_ellipse), id_ellipse, sizeof(id_ellipse), att_ellipse, GL_TRIANGLES))
+                    LOGE("Falha ao carregar mesh.");
+
+                //
+                // Carrega os shaders usando a classe GLShader.
+                if (!s_metalball.Load("Shaders/metalball.vs.glsl", "Shaders/metalball.fs.glsl")) // Carrega os shaders de vértice e fragmento a partir dos arquivos
+                    LOGE("Falha ao carregar shaders.");
+
+                // Cria um quadrado cobrindo toda a tela e obtém o ID do VAO para renderização
+                float v_metalball[] = {-1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f};
+                unsigned int id_metalball[] = {0, 1, 2, 2, 3, 0};
+                std::vector<GLVertexAttribute> att_metalball = {
+                    {0, 2, GL_FLOAT}, // Atributo de posição (index 0, 2 componentes, tipo float)
+                };
+
+                // Carrega os dados de vértice e índice para o mesh e configura os buffers
+                if (!m_metalball.Load(v_metalball, sizeof(v_metalball), id_metalball, sizeof(id_metalball), att_metalball, GL_TRIANGLES))
                     LOGE("Falha ao carregar mesh.");
 
                 //
@@ -117,11 +165,7 @@ public:
                     LOGE("Falha ao carregar shaders.");
 
                 // Cria um quadrado cobrindo toda a tela e obtém o ID do VAO para renderização
-                float v_sprite[] = {
-                    -1.0f, -1.0f, 0.0f, 0.0f,
-                    1.0f, -1.0f, 1.0f, 0.0f,
-                    1.0f, 1.0f, 1.0f, 1.0f,
-                    -1.0f, 1.0f, 0.0f, 1.0f};
+                float v_sprite[] = {-1.0f, -1.0f, 0.0f, 0.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f};
                 unsigned int id_sprite[] = {0, 1, 2, 2, 3, 0};
                 std::vector<GLVertexAttribute> att_sprite = {
                     {0, 2, GL_FLOAT}, // Atributo de posição (index 0, 2 componentes, tipo float)
@@ -144,7 +188,7 @@ public:
 
             // Render Point
             s_point.Use();
-            const glm::vec2 p_point{0.0f, 0.0f};
+            const glm::vec2 p_point{0.0f, -0.1f};
             glUniform2fv(glGetUniformLocation(s_point.Get(), "u_pos"), 1, &p_point.x);
             glUniform4f(glGetUniformLocation(s_point.Get(), "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
             glEnable(GL_PROGRAM_POINT_SIZE);
@@ -161,21 +205,65 @@ public:
             s_triangle.Use();
             const glm::vec2 t_points[3]{{-0.4f, -0.4f}, {0.4f, -0.4f}, {0.0f, 0.4f}};
             glUniform2fv(glGetUniformLocation(s_triangle.Get(), "u_point"), 3, &t_points[0].x);
-            glUniform4f(glGetUniformLocation(s_triangle.Get(), "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
-            glLineWidth(2.0f);
+            glUniform4f(glGetUniformLocation(s_triangle.Get(), "u_fill_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            glUniform4f(glGetUniformLocation(s_triangle.Get(), "u_outline_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            glUniform1f(glGetUniformLocation(s_triangle.Get(), "u_thickness"), 0.02f);
+            glUniform1i(glGetUniformLocation(s_triangle.Get(), "u_outline"), true);
             m_triangle.Draw();
 
+            // Render Rect
+            s_rect.Use();
+            const glm::vec2 r_points[4]{{-0.3f, -0.3f}, {0.3f, -0.3f}, {0.3f, 0.3f}, {-0.3f, 0.3f}};
+            glUniform2fv(glGetUniformLocation(s_rect.Get(), "u_point"), 4, &r_points[0].x);
+            glUniform4f(glGetUniformLocation(s_rect.Get(), "u_fill_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            glUniform4f(glGetUniformLocation(s_rect.Get(), "u_outline_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            glUniform1f(glGetUniformLocation(s_rect.Get(), "u_thickness"), 0.02f);
+            glUniform1i(glGetUniformLocation(s_rect.Get(), "u_outline"), true);
+            m_rect.Draw();
+
+            // Render Ellipse
+            s_ellipse.Use();
+            const glm::vec2 e_center{0.0f, 0.0f}, e_radius{0.4f, 0.2f};
+            glUniform2fv(glGetUniformLocation(s_ellipse.Get(), "u_center"), 1, &e_center.x);
+            glUniform2fv(glGetUniformLocation(s_ellipse.Get(), "u_radius"), 1, &e_radius.x);
+            glUniform4f(glGetUniformLocation(s_ellipse.Get(), "u_fill_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            glUniform4f(glGetUniformLocation(s_ellipse.Get(), "u_outline_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            glUniform1f(glGetUniformLocation(s_ellipse.Get(), "u_thickness"), 0.02f);
+            glUniform1i(glGetUniformLocation(s_ellipse.Get(), "u_outline"), true);
+            m_ellipse.Draw();
+
+            // Render Ellipse
+            s_metalball.Use();
+            const glm::vec2 m_center[]{{-0.04f, 0.01f}, {0.04f, 0.01f}, {0.0f, 0.04f}};
+            const float m_radius[]{0.03f, 0.03f, 0.03f};
+            const GLsizei count = sizeof(m_center) / sizeof(m_center[0]);
+            glUniform2fv(glGetUniformLocation(s_metalball.Get(), "u_center"), count, &m_center[0].x);
+            glUniform1fv(glGetUniformLocation(s_metalball.Get(), "u_radius"), count, m_radius);
+            glUniform1i(glGetUniformLocation(s_metalball.Get(), "u_count"), count);
+            glUniform4f(glGetUniformLocation(s_metalball.Get(), "u_fill_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            glUniform4f(glGetUniformLocation(s_metalball.Get(), "u_outline_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            glUniform1f(glGetUniformLocation(s_metalball.Get(), "u_threshold"), 0.8f);
+            glUniform1f(glGetUniformLocation(s_metalball.Get(), "u_thickness"), 0.2f);
+            glUniform1i(glGetUniformLocation(s_metalball.Get(), "u_outline"), true);
+            m_metalball.Draw();
+
             // Render Sprite
-            // s_sprite.Use();                                 // Usa o programa de shader para renderização
-            // glActiveTexture(GL_TEXTURE0);                   // Ativa a unidade de textura 0 para amostrar a textura no shader
-            // glBindTexture(GL_TEXTURE_2D, img_sprite.Get()); // Liga a textura para que o shader possa amostrá-la
-            // m_sprite.Draw();                                // Desenha o mesh usando os dados de vértice e índice carregados
+            s_sprite.Use();
+            const glm::vec2 s_point{-0.75f, -0.0f};
+            glUniform2fv(glGetUniformLocation(s_sprite.Get(), "u_pos"), 1, &s_point.x);
+            glUniform2f(glGetUniformLocation(s_sprite.Get(), "u_scale"), 0.25f, 0.25f);
+            glUniform1f(glGetUniformLocation(s_sprite.Get(), "u_rotation"), glm::radians(0.0f));
+            glUniform2f(glGetUniformLocation(s_sprite.Get(), "u_tex_scale"), 1.0f, 1.0f);
+            glUniform4f(glGetUniformLocation(s_sprite.Get(), "u_color"), 1.0f, 1.0f, 1.0f, 1.0f);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, img_sprite.Get());
+            m_sprite.Draw();
 
             SwapBuffers();
             PollEvents();
         }
 
-        // D
+        // De
         s_point.Delete();
         s_line.Delete();
         s_triangle.Delete();

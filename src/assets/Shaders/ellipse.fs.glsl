@@ -8,10 +8,12 @@ uniform float u_thickness;
 
 uniform int   u_outline;
 
-void main() {
-    vec2 d = abs(v_uv);
+void main()
+{
+    float d = length(v_uv);
+    float outer =  1.0;
 
-    if (d.x > 1.0 || d.y > 1.0) discard;
+    if (d > outer) discard;
 
     // fill
     if (u_outline == 0)
@@ -20,10 +22,10 @@ void main() {
         return;
     }
 
-    vec2 inner = vec2(1.0 - u_thickness);
-
-    if (d.x < inner.x && d.y < inner.y) discard;
-
     // outline
+    float inner = outer - u_thickness;
+
+    if (d < inner) discard;    
+
     frag_color = u_outline_color;
 }
