@@ -129,3 +129,9 @@ GLFWwindow *GLWindow::getWindow() const
 {
     return window;
 }
+
+// 
+void GLWindow::GetScreenSize(int &width, int &height) const
+{
+    glfwGetFramebufferSize(window, &width, &height);
+}

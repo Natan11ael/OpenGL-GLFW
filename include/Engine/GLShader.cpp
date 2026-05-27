@@ -35,7 +35,7 @@ unsigned int GLShader::GetCompileShader(unsigned int shader_type, const char *sh
     unsigned int shader_id = glCreateShader(shader_type); // Cria um shader do tipo especificado (GL_VERTEX_SHADER ou GL_FRAGMENT_SHADER)
 
 #ifdef ANDROID
-    const char *version = (shader_type == GL_FRAGMENT_SHADER) ? "#version 300 es\nprecision mediump float;\n" : "#version 300 es\n";
+    const char *version = (shader_type == GL_FRAGMENT_SHADER) ? "#version 300 es\nprecision highp float;\n" : "#version 300 es\n";
 #else
     const char *version = "#version 330 core\n";
 #endif

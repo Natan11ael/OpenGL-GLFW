@@ -138,3 +138,10 @@ void GLAndroid::Destroy()
     context = EGL_NO_CONTEXT;
     surface = EGL_NO_SURFACE;
 }
+
+// 
+void GLAndroid::GetScreenSize(int &width, int &height) const
+{
+    eglQuerySurface(display, surface, EGL_WIDTH, &width);
+    eglQuerySurface(display, surface, EGL_HEIGHT, &height);
+}

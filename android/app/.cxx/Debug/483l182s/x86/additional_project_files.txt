@@ -10,6 +10,11 @@ E:\Documentos\GitHub\OpenGL-GLFW\include\GL\wglew.h
 E:\Documentos\GitHub\OpenGL-GLFW\include\GLFW\glfw3.h
 E:\Documentos\GitHub\OpenGL-GLFW\include\GLFW\glfw3native.h
 E:\Documentos\GitHub\OpenGL-GLFW\include\KHR\khrplatform.h
+E:\Documentos\GitHub\OpenGL-GLFW\include\NanoVG\fontstash.h
+E:\Documentos\GitHub\OpenGL-GLFW\include\NanoVG\nanovg.h
+E:\Documentos\GitHub\OpenGL-GLFW\include\NanoVG\nanovg_gl.h
+E:\Documentos\GitHub\OpenGL-GLFW\include\NanoVG\nanovg_gl_utils.h
+E:\Documentos\GitHub\OpenGL-GLFW\include\NanoVG\stb_truetype.h
 E:\Documentos\GitHub\OpenGL-GLFW\include\glad\glad.h
 E:\Documentos\GitHub\OpenGL-GLFW\include\glm\common.hpp
 E:\Documentos\GitHub\OpenGL-GLFW\include\glm\detail\_features.hpp
@@ -302,4 +307,5 @@ E:\Documentos\GitHub\OpenGL-GLFW\include\glm\vec3.hpp
 E:\Documentos\GitHub\OpenGL-GLFW\include\glm\vec4.hpp
 E:\Documentos\GitHub\OpenGL-GLFW\include\glm\vector_relational.hpp
 E:\Documentos\GitHub\OpenGL-GLFW\include\stb\stb_image.h
+E:\Documentos\GitHub\OpenGL-GLFW\include\stb\stb_truetype.h
 E:\Documentos\GitHub\OpenGL-GLFW\android\app\src\main\cpp\GLAndroid.hpp

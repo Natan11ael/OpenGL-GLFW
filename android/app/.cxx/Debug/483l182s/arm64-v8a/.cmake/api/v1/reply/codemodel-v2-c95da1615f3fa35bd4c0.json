@@ -48,7 +48,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "native-lib::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-native-lib-Debug-f3a3529a8f8bdd06706d.json",
+					"jsonFile" : "target-native-lib-Debug-975006933675312664d8.json",
 					"name" : "native-lib",
 					"projectIndex" : 0
 				}
@@ -58,7 +58,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "E:/Documentos/GitHub/OpenGL-GLFW/android/app/.cxx/Debug/483l182s/x86",
+		"build" : "E:/Documentos/GitHub/OpenGL-GLFW/android/app/.cxx/Debug/483l182s/arm64-v8a",
 		"source" : "E:/Documentos/GitHub/OpenGL-GLFW/android/app"
 	},
 	"version" : 

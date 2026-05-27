@@ -10,6 +10,8 @@ uniform float u_rotation;
 
 uniform vec2  u_tex_scale;
 
+uniform float u_aspect;
+
 void main() {
     vec2 pos = a_pos * u_scale;
 
@@ -22,8 +24,8 @@ void main() {
     );
 
     pos += u_pos;
+    pos.x /= u_aspect;
 
     gl_Position = vec4(pos, 0.0, 1.0);
-
     vTex = a_tex * u_tex_scale;
 }

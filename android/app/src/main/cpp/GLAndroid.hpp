@@ -37,4 +37,5 @@ public:
     bool ShouldClose() const override;                                              // Implementação do método para verificar se a janela deve ser fechada
     virtual void RunEventLoop() override;                                           // Implementação do método para executar o loop principal de eventos no Android
     void Destroy() override;                                                        // Implementação do método para destruir a janela e limpar recursos
+    void GetScreenSize(int &width, int &height) const;                              // Função para obeter o ponteiro do tamanho da tela da janela
 };

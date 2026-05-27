@@ -16,6 +16,11 @@
 },
 {
   "directory": "E:/Documentos/GitHub/OpenGL-GLFW/android/app/.cxx/Debug/483l182s/armeabi-v7a",
+  "command": "E:\\ProgramData\\Android\\Sdk\\ndk\\25.1.8937393\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe --target=armv7-none-linux-androideabi24 --sysroot=E:/ProgramData/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dnative_lib_EXPORTS -IE:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include -IE:/Documentos/GitHub/OpenGL-GLFW/android/app/../../src -IE:/ProgramData/Android/Sdk/ndk/25.1.8937393/sources/android/native_app_glue -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC -o CMakeFiles\\native-lib.dir\\E_\\Documentos\\GitHub\\OpenGL-GLFW\\include\\NanoVG\\nanovg.c.o -c E:\\Documentos\\GitHub\\OpenGL-GLFW\\include\\NanoVG\\nanovg.c",
+  "file": "E:\\Documentos\\GitHub\\OpenGL-GLFW\\include\\NanoVG\\nanovg.c"
+},
+{
+  "directory": "E:/Documentos/GitHub/OpenGL-GLFW/android/app/.cxx/Debug/483l182s/armeabi-v7a",
   "command": "E:\\ProgramData\\Android\\Sdk\\ndk\\25.1.8937393\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe --target=armv7-none-linux-androideabi24 --sysroot=E:/ProgramData/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/windows-x86_64/sysroot -Dnative_lib_EXPORTS -IE:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include -IE:/Documentos/GitHub/OpenGL-GLFW/android/app/../../src -IE:/ProgramData/Android/Sdk/ndk/25.1.8937393/sources/android/native_app_glue -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security  -fno-limit-debug-info  -fPIC -o CMakeFiles\\native-lib.dir\\E_\\Documentos\\GitHub\\OpenGL-GLFW\\include\\glad\\glad.c.o -c E:\\Documentos\\GitHub\\OpenGL-GLFW\\include\\glad\\glad.c",
   "file": "E:\\Documentos\\GitHub\\OpenGL-GLFW\\include\\glad\\glad.c"
 },

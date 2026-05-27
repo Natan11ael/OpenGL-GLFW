@@ -44,6 +44,7 @@ endif()
 # CORE_SOURCES at CMakeLists.txt:7 (file)
 file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/*.c")
 set(OLD_GLOB
+  "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/NanoVG/nanovg.c"
   "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/glad/glad.c"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
@@ -74,6 +75,11 @@ set(OLD_GLOB
   "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/GLFW/glfw3.h"
   "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/GLFW/glfw3native.h"
   "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/KHR/khrplatform.h"
+  "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/NanoVG/fontstash.h"
+  "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/NanoVG/nanovg.h"
+  "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/NanoVG/nanovg_gl.h"
+  "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/NanoVG/nanovg_gl_utils.h"
+  "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/NanoVG/stb_truetype.h"
   "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/glad/glad.h"
   "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/glm/simd/common.h"
   "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/glm/simd/exponential.h"
@@ -86,6 +92,7 @@ set(OLD_GLOB
   "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/glm/simd/trigonometric.h"
   "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/glm/simd/vector_relational.h"
   "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/stb/stb_image.h"
+  "E:/Documentos/GitHub/OpenGL-GLFW/android/app/../../include/stb/stb_truetype.h"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
